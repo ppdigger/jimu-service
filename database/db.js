@@ -48,7 +48,6 @@ exports.findArticleList = function(_query, cb){
 	} else{
 		query = { author: mongoose.Types.ObjectId(_query.search) }
 	}
-	console.log(query);
 	Article.find(query, null, { skip: _query['page']* _query['limit'], limit: parseInt(_query['limit']), sort:{ 'createTime': -1 } })
 			.populate('author', 'email name')
 			.exec(function(err, doc){
@@ -60,3 +59,11 @@ exports.findArticleList = function(_query, cb){
 				}
 			})
 }
+
+var qq = {
+	page: 0,
+	limit: 5
+}
+Article.find({},null, { skip:  qq['page']* qq['limit'], limit: parseInt(qq['limit']), sort:{ 'createTime': -1 } }, function(err, doc){
+	// console.log(doc);
+});
