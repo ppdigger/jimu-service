@@ -9,7 +9,8 @@ var Schema = mongoose.Schema;
 var userScheMa = new Schema({
 	email: String,
 	password: String,
-	name: String
+	name: String,
+	avatar: String
 })
 var User = db.model('User', userScheMa);
 exports.authenticate = function(_query, cb){
@@ -49,7 +50,7 @@ exports.findArticleList = function(_query, cb){
 		query = { author: mongoose.Types.ObjectId(_query.search) }
 	}
 	Article.find(query, null, { skip: _query['page']* _query['limit'], limit: parseInt(_query['limit']), sort:{ 'createTime': -1 } })
-			.populate('author', 'email name')
+			.populate('author', 'name avatar')
 			.exec(function(err, doc){
 				console.log(doc);
 				if(err){
