@@ -22,7 +22,7 @@ exports.authenticate = function(_query, cb){
 		}
 	})
 }
-exports.logon = function(_query, cb){
+exports.signup = function(_query, cb){
 	User.create(_query, function(err, doc){
 		if(err){
 			cb(err, null)
@@ -52,7 +52,6 @@ exports.findArticleList = function(_query, cb){
 	Article.find(query, null, { skip: _query['page']* _query['limit'], limit: parseInt(_query['limit']), sort:{ 'createTime': -1 } })
 			.populate('author', 'name avatar')
 			.exec(function(err, doc){
-				console.log(doc);
 				if(err){
 					cb(err, null)
 				} else{
@@ -60,11 +59,3 @@ exports.findArticleList = function(_query, cb){
 				}
 			})
 }
-
-var qq = {
-	page: 0,
-	limit: 5
-}
-Article.find({},null, { skip:  qq['page']* qq['limit'], limit: parseInt(qq['limit']), sort:{ 'createTime': -1 } }, function(err, doc){
-	// console.log(doc);
-});
