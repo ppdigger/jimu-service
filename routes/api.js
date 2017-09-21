@@ -26,52 +26,42 @@ router.post('/articleList', function(req, res, next){
 })
 
 router.post('/signup', function(req, res, next){
-	var uploadDir='./public/images/avatar/';
-  	var form=new formidable.IncomingForm();
-	form.encoding='utf-8';
-	form.uploadDir=uploadDir;
-	form.extensions=true;
-	form.maxFieldsSize = 2 * 1024 * 1024;
-	form.parse(req, function(err, fields, files) {  
-		console.log('fields',fields);
-		console.log('files',files);
-	});  
 	let _email = req.body.email,
 		_password = req.body.password,
 		_name = req.body.name,
 		_query = {email: _email, password: _password, name: _name};
-	// db.authenticate({ email: _email }, function(err, doc){
-	// 	if (err) {
-	// 	  console.log('not found, and err is ', err)
-	// 	  return next(err)
-	// 	} else{
-	// 		if (doc === null || doc.length === 0) {
-	// 			db.authenticate({ name: _name }, function(err, doc){
-	// 				if(err){
-	// 					console.log('not found, and err is ', err)
-	// 					return next(err)
-	// 				} else{
-	// 					if(doc === null || doc.length === 0){
-	// 						db.signup(_query, function(err, doc){
-	// 							if(err){
-	// 								console.log('signup err is ', err)
-	// 								return next(err)
-	// 							} else{
-	// 								res.json({status:0,message:"register success",data:[]});
-	// 							}
-	// 						})
-	// 					} else{
-	// 						console.log('name has been registered');
-	// 						res.json({status:1,message:"name has been registered",data:[]});
-	// 					}
-	// 				}
-	// 			})
-	// 		} else{
-	// 			console.log('email has been registered');
-	// 			res.json({status:1,message:"email has been registered",data:[]});
-	// 		}
-	// 	}
-	// })
+	db.authenticate({ email: _email }, function(err, doc){
+		if (err) {
+		  console.log('not found, and err is ', err)
+		  return next(err)
+		} else{
+			if (doc === null || doc.length === 0) {
+				db.authenticate({ name: _name }, function(err, doc){
+					if(err){
+						console.log('not found, and err is ', err)
+						return next(err)
+					} else{
+						if(doc === null || doc.length === 0){
+							db.signup(_query, function(err, doc){
+								if(err){
+									console.log('signup err is ', err)
+									return next(err)
+								} else{
+									res.json({status:0,message:"register success",data:[]});
+								}
+							})
+						} else{
+							console.log('name has been registered');
+							res.json({status:1,message:"name has been registered",data:[]});
+						}
+					}
+				})
+			} else{
+				console.log('email has been registered');
+				res.json({status:1,message:"email has been registered",data:[]});
+			}
+		}
+	})
 })
 
 router.post('/authenticate', function(req, res, next){
